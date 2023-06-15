@@ -39,7 +39,7 @@ int main()
     }
     else
     {
-        cout<<no<<" not present"<<endl;
+        cout<<no<<"  not present"<<endl;
     }
     
 }
