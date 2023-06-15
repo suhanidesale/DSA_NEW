@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 
-void merge(int *arr , int s , int e)
+long long merge(int *arr , int s , int e)
 {
     int mid = (s+e)/2;
     int len1 = mid-s+1;
     int len2 = e-mid;
-
+    long long inv = 0;
     int *arr1 = new int[len1]; 
     int *arr2 = new int[len2]; 
 
@@ -19,7 +19,7 @@ void merge(int *arr , int s , int e)
     }
     mainArrayIndex = mid+1;
     for (int j = 0; j < len2; j++)
-    {
+    {  
         arr2[j] = arr[mainArrayIndex];
         mainArrayIndex++;
     }
@@ -41,6 +41,7 @@ void merge(int *arr , int s , int e)
             arr[mainArrayIndex] = arr2[index2];
             mainArrayIndex++;
             index2++;
+            inv+= len1-index1;
         }
         
     }
@@ -59,34 +60,37 @@ void merge(int *arr , int s , int e)
     }
     
     
-    
+    return inv;
     
 }
 
-void sort(int *arr, int s,int e)
+long long sort(int *arr, int s,int e)
 {
+
+    long long inv = 0;
    if (s >= e)
    {
-    return ;
+    return 0;
    }
 
    int mid = (s + e)/2;
-   sort(arr,s,mid);
-   sort(arr,mid+1,e);
+   inv += sort(arr,s,mid);
+   inv += sort(arr,mid+1,e);
 
-    merge(arr , s , e);
-   
+    inv += merge(arr , s , e);
+   return inv;
 }
 int main()
 {
     int arr[5] = {2,5,1,6,9};
 
-    sort(arr,0,5);
+    cout<<sort(arr,0,5)<<endl;
 
     for (int i = 0; i < 5; i++)
     {
         cout<<arr[i]<<" ";
     }
+    
     
 
 }
