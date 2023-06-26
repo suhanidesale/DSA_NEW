@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+#include <map>
 
 
 class linkedlist
@@ -123,7 +124,99 @@ void print(linkedlist* &head)
     
 }
 
+bool detectloop(linkedlist *head)
+{
+    if (head == NULL)
+    {
+        return false;
+    }
 
+    map<linkedlist* , bool>visited;
+    linkedlist* temp = head;
+
+    while (temp != NULL)
+    {
+        if (visited[temp] == true)
+        {
+            cout<<"Element: "<<temp->data<<endl;
+            return true;
+        }
+        visited[temp] = true;
+        temp = temp->next;
+        
+    }
+
+    return false;    
+    
+} 
+
+linkedlist* cycledetection(linkedlist *head)
+{
+    if (head == NULL)
+    {
+        return NULL;
+    }
+    
+    linkedlist* slow = head;
+    linkedlist* fast = head;
+    while (slow != NULL && fast != NULL)
+    {
+        fast = fast->next;
+        if(fast != NULL)
+        {
+            fast = fast->next;
+
+        }
+            slow = slow->next;
+
+        if (slow == fast)
+        {
+            cout<<"Element: "<<slow->data<<endl;
+            return slow;
+        }
+        
+    }
+
+    return NULL;
+
+}
+
+linkedlist *pointofint(linkedlist* head)
+{
+    if (head == NULL)
+    {
+        return NULL;
+    }
+    
+    linkedlist* intersect = cycledetection(head);
+    linkedlist* slow = head;
+    while (slow != intersect)
+    {
+        intersect = intersect->next;
+        slow = slow->next;
+    }
+
+    return intersect;
+    
+}
+
+void removeloop(linkedlist* head)
+{
+    if (head == NULL)
+    {
+        return;
+    }
+    
+    linkedlist* startpoint  = pointofint(head);
+    linkedlist* temp = startpoint;
+    while (temp->next != startpoint)
+    {
+        temp = temp->next;
+    }
+        temp->next = NULL;
+
+    
+}
 
 int main()
 {
@@ -148,5 +241,14 @@ int main()
     print(head);
     cout<<"head "<<head->data<<endl;
     cout<<"tail "<<tail->data<<endl;
+    tail->next = head->next;
+    if(cycledetection(head) != NULL)
+    {
+        cout<<"Cycle detected"<<endl;
+    }
+    else{
+        cout<<"Not present"<<endl;
+    }
 
+    cout<<pointofint(head)->data<<endl;
 }
